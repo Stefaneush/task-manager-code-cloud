@@ -4,61 +4,57 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const path = require("path")
-require("dotenv").config()
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT 
 const JWT_SECRET = process.env.JWT_SECRET || "tu_clave_secreta_muy_segura"
+const FRONTEND_PATH = path.join(__dirname, "..", "frontend", "public")
 
 // Middleware
 app.use(cors())
 app.use(express.json())
-app.use(express.static("public"))
-
-// Database connection
-const dbConfig = {
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "task_manager",
-}
-
-let db
+// Servir archivos estáticos desde el frontend
+app.use(express.static(FRONTEND_PATH))
 
 async function initDatabase() {
   try {
-    db = await mysql.createConnection(dbConfig)
+    // Conexión
+    db = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME, 
+    })
+
     console.log("Conectado a MySQL")
 
-    // Create database if it doesn't exist
-    await db.execute(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`)
-    await db.execute(`USE ${dbConfig.database}`)
-
-    // Create users table
+    
+    // Crear tabla users
     await db.execute(`
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `)
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
 
-    // Create tasks table
+    // Crear tabla tasks
     await db.execute(`
-            CREATE TABLE IF NOT EXISTS tasks (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                description TEXT,
-                priority ENUM('baja', 'media', 'alta') DEFAULT 'media',
-                completed BOOLEAN DEFAULT FALSE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-            )
-        `)
+      CREATE TABLE IF NOT EXISTS tasks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        priority ENUM('baja', 'media', 'alta') DEFAULT 'media',
+        completed BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )
+    `)
 
     console.log("Tablas creadas exitosamente")
   } catch (error) {
@@ -66,6 +62,7 @@ async function initDatabase() {
     process.exit(1)
   }
 }
+
 
 // Auth middleware
 const authenticateToken = (req, res, next) => {
@@ -276,7 +273,7 @@ app.delete("/api/tasks/:id", authenticateToken, async (req, res) => {
 
 // Serve static files
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"))
+  res.sendFile(path.join(FRONTEND_PATH, "index.html"))
 })
 
 // Initialize database and start server
