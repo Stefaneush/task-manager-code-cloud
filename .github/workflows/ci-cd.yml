@@ -160,7 +160,7 @@ jobs:
       - name: Checkout manifests repo
         uses: actions/checkout@v4
         with:
-          repository: ${{ secrets.MANIFESTS_REPO }}
+          repository: Stefaneush/task-manager-k8s-cloud
           token: ${{ secrets.MANIFESTS_TOKEN }}
           path: manifests
       
