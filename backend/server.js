@@ -15,7 +15,7 @@ const FRONTEND_PATH = path.join(__dirname, "..", "frontend", "public")
 app.use(cors())
 app.use(express.json())
 // Servir archivos estáticos desde el frontend
-app.use((FRONTEND_PATH))
+app.use(express.static(FRONTEND_PATH))
 
 async function initDatabase() {
   try {
