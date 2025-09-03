@@ -33,7 +33,7 @@ class TaskManager {
     const token = localStorage.getItem("authToken")
     if (token) {
       try {
-        const response = await fetch(`${this.apiUrl}/auth/verify`, {
+        const response = await fetch(`${this.apiUrl}/api/auth/verify`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,7 +63,7 @@ class TaskManager {
     const password = document.getElementById("loginPassword").value
 
     try {
-      const response = await fetch(`${this.apiUrl}/auth/login`, {
+      const response = await fetch(`${this.apiUrl}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ class TaskManager {
     const password = document.getElementById("registerPassword").value
 
     try {
-      const response = await fetch(`${this.apiUrl}/auth/register`, {
+      const response = await fetch(`${this.apiUrl}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
