@@ -3,7 +3,7 @@ class TaskManager {
     this.currentUser = null
     this.tasks = []
     this.currentFilter = "all"
-    this.apiUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : ""
+    this.apiUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : "/api"
     this.init()
   }
 
@@ -33,7 +33,7 @@ class TaskManager {
     const token = localStorage.getItem("authToken")
     if (token) {
       try {
-        const response = await fetch(`${this.apiUrl}/api/auth/verify`, {
+        const response = await fetch(`${this.apiUrl}/auth/verify`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,7 +63,7 @@ class TaskManager {
     const password = document.getElementById("loginPassword").value
 
     try {
-      const response = await fetch(`${this.apiUrl}/api/auth/login`, {
+      const response = await fetch(`${this.apiUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ class TaskManager {
     const password = document.getElementById("registerPassword").value
 
     try {
-      const response = await fetch(`${this.apiUrl}/api/auth/register`, {
+      const response = await fetch(`${this.apiUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
