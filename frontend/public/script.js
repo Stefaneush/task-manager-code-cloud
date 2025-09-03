@@ -3,7 +3,7 @@ class TaskManager {
     this.currentUser = null
     this.tasks = []
     this.currentFilter = "all"
-    this.apiUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : "/api"
+    this.apiUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : ""
     this.init()
   }
 
