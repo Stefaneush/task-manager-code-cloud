@@ -286,6 +286,5 @@ class TaskManager {
   }
 }
 
-// Initialize the app
+// Inicializar la app
 const taskManager = new TaskManager()
-
