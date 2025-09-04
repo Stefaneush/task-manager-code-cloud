@@ -288,3 +288,5 @@ class TaskManager {
 
 // Initialize the app
 const taskManager = new TaskManager()
+
+console.log("Hola mundo");
