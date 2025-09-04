@@ -285,6 +285,3 @@ class TaskManager {
       .join("")
   }
 }
-
-// Inicializar la app
-const taskManager = new TaskManager()
