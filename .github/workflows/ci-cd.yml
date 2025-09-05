@@ -171,12 +171,12 @@ jobs:
       
       - name: Update frontend image tag
         run: |
-          cd manifests/overlays/production
+          cd manifests/overlays/prod
           kustomize edit set image task-manager-frontend=${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}@${{ needs.build-frontend.outputs.image-digest }}
       
       - name: Update backend image tag
         run: |
-          cd manifests/overlays/production
+          cd manifests/overlays/prod
           kustomize edit set image task-manager-backend=${{ env.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}@${{ needs.build-backend.outputs.image-digest }}
       
       - name: Commit and push changes
