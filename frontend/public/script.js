@@ -285,4 +285,3 @@ class TaskManager {
       .join("")
   }
 }
-console.log("hola");
