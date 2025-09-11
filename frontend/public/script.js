@@ -286,5 +286,3 @@ class TaskManager {
   }
 }
 
-console.log("hola mundo");
-
